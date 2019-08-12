@@ -38,5 +38,5 @@ if __name__=="__main__":
             females_c += 1
         else:
             not_found += 1
-    print males_c, females_c, not_found
+    print(males_c, females_c, not_found)
     pdb.set_trace()

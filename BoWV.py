@@ -66,7 +66,7 @@ def select_tweets_whose_embedding_exists():
                 _emb+=1
         if _emb:   # Not a blank tweet
             tweet_return.append(tweet)
-    print 'Tweets selected:', len(tweet_return)
+    print('Tweets selected:', len(tweet_return))
     return tweet_return
 
 
@@ -94,7 +94,7 @@ def gen_data():
     
 def get_model(m_type=None):
     if not m_type:
-        print "ERROR: Please specify a model type!"
+        print("ERROR: Please specify a model type!")
         return None
     if m_type == 'logistic':
         logreg = LogisticRegression()
@@ -107,7 +107,7 @@ def get_model(m_type=None):
     elif m_type == "svm_linear":
         logreg = LinearSVC(loss=LOSS_FUN, class_weight=CLASS_WEIGHT)
     else:
-        print "ERROR: Please specify a correct model"
+        print("ERROR: Please specify a correct model")
         return None
 
     return logreg
@@ -115,17 +115,17 @@ def get_model(m_type=None):
 
 def classification_model(X, Y, model_type=None):
     X, Y = shuffle(X, Y, random_state=SEED)
-    print "Model Type:", model_type
+    print("Model Type:", model_type)
 
     #predictions = cross_val_predict(logreg, X, Y, cv=NO_OF_FOLDS)
     scores1 = cross_val_score(get_model(model_type), X, Y, cv=NO_OF_FOLDS, scoring='precision_weighted')
-    print "Precision(avg): %0.3f (+/- %0.3f)" % (scores1.mean(), scores1.std() * 2)
+    print("Precision(avg): %0.3f (+/- %0.3f)" % (scores1.mean(), scores1.std() * 2))
 
     scores2 = cross_val_score(get_model(model_type), X, Y, cv=NO_OF_FOLDS, scoring='recall_weighted')
-    print "Recall(avg): %0.3f (+/- %0.3f)" % (scores2.mean(), scores2.std() * 2)
+    print("Recall(avg): %0.3f (+/- %0.3f)" % (scores2.mean(), scores2.std() * 2))
     
     scores3 = cross_val_score(get_model(model_type), X, Y, cv=NO_OF_FOLDS, scoring='f1_weighted')
-    print "F1-score(avg): %0.3f (+/- %0.3f)" % (scores3.mean(), scores3.std() * 2)
+    print("F1-score(avg): %0.3f (+/- %0.3f)" % (scores3.mean(), scores3.std() * 2))
 
 
 if __name__ == "__main__":
@@ -150,7 +150,7 @@ if __name__ == "__main__":
     SEED = int(args.seed)
     NO_OF_FOLDS = int(args.folds)
     CLASS_WEIGHT = args.class_weight
-    N_ESTIMATORS = int(args.estimators)
+    N_ESTIMATORS = args.estimators #int() omitted
     LOSS_FUN = args.loss
     KERNEL = args.kernel
     if args.tokenizer == "glove":
@@ -158,9 +158,9 @@ if __name__ == "__main__":
     elif args.tokenizer == "nltk":
         TOKENIZER = TweetTokenizer().tokenize
 
-    print 'GLOVE embedding: %s' %(GLOVE_MODEL_FILE)
-    print 'Embedding Dimension: %d' %(EMBEDDING_DIM)
-    word2vec_model = gensim.models.Word2Vec.load_word2vec_format(GLOVE_MODEL_FILE)
+    print('GLOVE embedding: %s' %(GLOVE_MODEL_FILE))
+    print('Embedding Dimension: %d' %(EMBEDDING_DIM))
+    word2vec_model = gensim.models.KeyedVectors.load_word2vec_format(GLOVE_MODEL_FILE)
 
     #filter_vocab(20000)
 

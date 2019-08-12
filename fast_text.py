@@ -64,8 +64,8 @@ def get_embedding(word):
     #return
     try:
         return word2vec_model[word]
-    except Exception, e:
-        print 'Encoding not found: %s' %(word)
+    except Exception as e:
+        print('Encoding not found: %s' %(word))
         return np.zeros(EMBEDDING_DIM)
 
 def get_embedding_weights():
@@ -77,7 +77,7 @@ def get_embedding_weights():
     	except:
     		n += 1
     		pass
-    print "%d embedding missed"%n
+    print("%d embedding missed"%n)
     #pdb.set_trace()
     return embedding
 
@@ -96,7 +96,7 @@ def select_tweets():
                 _emb+=1
         if _emb:   # Not a blank tweet
             tweet_return.append(tweet)
-    print 'Tweets selected:', len(tweet_return)
+    print('Tweets selected:', len(tweet_return))
     #pdb.set_trace()
     return tweet_return
 
@@ -171,12 +171,12 @@ def fast_text_model(sequence_length):
     model.add(GlobalAveragePooling1D())
     model.add(Dense(3, activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-    print model.summary()
+    print(model.summary())
     return model
 
 def train_fasttext(X, y, model, inp_dim,embedding_weights, epochs=10, batch_size=128):
     cv_object = KFold(n_splits=10, shuffle=True, random_state=42)
-    print cv_object
+    print(cv_object)
     p, r, f1 = 0., 0., 0.
     p1, r1, f11 = 0., 0., 0.
     sentence_len = X.shape[1]
@@ -203,14 +203,14 @@ def train_fasttext(X, y, model, inp_dim,embedding_weights, epochs=10, batch_size
                     print e
                 #print x.shape, y.shape
                 loss, acc = model.train_on_batch(x, y_temp)#, class_weight=class_weights)
-                print loss, acc
+                print(loss, acc)
         #pdb.set_trace()
         lookup_table += model.layers[0].get_weights()[0]
         y_pred = model.predict_on_batch(X_test)
         y_pred = np.argmax(y_pred, axis=1)
-        print classification_report(y_test, y_pred)
-        print precision_recall_fscore_support(y_test, y_pred)
-        print y_pred
+        print(classification_report(y_test, y_pred))
+        print(precision_recall_fscore_support(y_test, y_pred))
+        print(y_pred)
         p += precision_score(y_test, y_pred, average='weighted')
         p1 += precision_score(y_test, y_pred, average='micro')
         r += recall_score(y_test, y_pred, average='weighted')
@@ -218,15 +218,15 @@ def train_fasttext(X, y, model, inp_dim,embedding_weights, epochs=10, batch_size
         f1 += f1_score(y_test, y_pred, average='weighted')
         f11 += f1_score(y_test, y_pred, average='micro')
 
-    print "macro results are"
-    print "average precision is %f" %(p/10)
-    print "average recall is %f" %(r/10)
-    print "average f1 is %f" %(f1/10)
+    print("macro results are")
+    print("average precision is %f" %(p/10))
+    print("average recall is %f" %(r/10))
+    print("average f1 is %f" %(f1/10))
 
-    print "micro results are"
-    print "average precision is %f" %(p1/10)
-    print "average recall is %f" %(r1/10)
-    print "average f1 is %f" %(f11/10)
+    print("micro results are")
+    print("average precision is %f" %(p1/10))
+    print("average recall is %f" %(r1/10))
+    print("average f1 is %f" %(f11/10))
     return lookup_table/float(10)
 
 
@@ -234,11 +234,11 @@ def check_semantic_sim(embedding_table, word):
     reverse_vocab = {v:k for k,v in vocab.iteritems()}
     sim_word_idx = get_similar_words(embedding_table, embedding_table[vocab[word]], 25)
     sim_words = map(lambda x:reverse_vocab[x[1]], sim_word_idx)
-    print sim_words
+    print(sim_words)
 
 def tryWord(embedding_table):
     while True:
-        print "enter word"
+        print("enter word")
         word = raw_input()
         if word == "pdb":
             pdb.set_trace()
@@ -255,7 +255,7 @@ if __name__ == "__main__":
     gen_vocab()
     X, y = gen_sequence()
     MAX_SEQUENCE_LENGTH = max(map(lambda x:len(x), X))
-    print "max seq length is %d"%(MAX_SEQUENCE_LENGTH)
+    print("max seq length is %d"%(MAX_SEQUENCE_LENGTH))
     data = pad_sequences(X, maxlen=MAX_SEQUENCE_LENGTH)
     y = np.array(y)
     W = get_embedding_weights()
@@ -266,5 +266,3 @@ if __name__ == "__main__":
     #check_semantic_sim(table)
     tryWord(table)
     pdb.set_trace()
-
-
