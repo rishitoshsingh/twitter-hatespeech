@@ -67,7 +67,7 @@ def get_embedding(word):
 def get_embedding_weights():
     embedding = np.zeros((len(vocab) + 1, EMBEDDING_DIM))
     n = 0
-    for k, v in vocab.iteritems():
+    for k, v in vocab.items():
         try:
             embedding[v] = word2vec_model[k]
         except:
@@ -136,7 +136,7 @@ def gen_sequence():
     X, y = [], []
     for tweet in tweets:
         text = TOKENIZER(tweet['text'].lower())
-        text = ''.join([c for c in text if c not in punctuation])
+        text = ' '.join([c for c in text if c not in punctuation])
         words = text.split()
         words = [word for word in words if word not in STOPWORDS]
         seq, _emb = [], []
@@ -160,7 +160,7 @@ def lstm_model(sequence_length, embedding_dim):
     model.add(Dropout(0.25))#, input_shape=(sequence_length, embedding_dim)))
     model.add(LSTM(50))
     model.add(Dropout(0.5))
-    model.add(Dense(3))
+    model.add(Dense(1))
     model.add(Activation('softmax'))
     model.compile(loss=LOSS_FUN, optimizer=OPTIMIZER, metrics=['accuracy'])
     print(model.summary())
@@ -185,7 +185,7 @@ def train_LSTM(X, y, model, inp_dim, weights, epochs=EPOCHS, batch_size=BATCH_SI
         X_test, y_test = X[test_index], y[test_index]
         y_train = y_train.reshape((len(y_train), 1))
         X_temp = np.hstack((X_train, y_train))
-        for epoch in xrange(epochs):
+        for epoch in range(epochs):
             for X_batch in batch_gen(X_temp, batch_size):
                 x = X_batch[:, :sentence_len]
                 y_temp = X_batch[:, sentence_len]
@@ -274,7 +274,7 @@ if __name__ == "__main__":
     print('Embedding Dimension: %d' %(EMBEDDING_DIM))
     print('Allowing embedding learning: %s' %(str(LEARN_EMBEDDINGS)))
 
-    word2vec_model = gensim.models.KeyedVectors.load_word2vec_format(GLOVE_MODEL_FILE,binary=True, encoding="utf-8")
+    word2vec_model = gensim.models.KeyedVectors.load_word2vec_format(GLOVE_MODEL_FILE,binary=False, encoding="UTF-8")
 
     tweets = select_tweets()
     gen_vocab()

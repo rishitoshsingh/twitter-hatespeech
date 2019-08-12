@@ -8,7 +8,7 @@ def batch_gen(X, batch_size):
     n_batches = int(math.ceil(n_batches))
     end = int(X.shape[0]/float(batch_size)) * batch_size
     n = 0
-    for i in xrange(0,n_batches):
+    for i in range(0,n_batches):
         if i < n_batches - 1:
             batch = X[i*batch_size:(i+1) * batch_size, :]
             yield batch
