@@ -47,7 +47,8 @@ np.random.seed(42)
 
 
 # PINKESH files
-GLOVE_MODEL_FILE="/home/pinkesh/DATASETS/glove-twitter/GENSIM.glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
+GLOVE_MODEL_FILE="C:\Users\bdcoe\Documents\Rishi_DNM\GENSIM.glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
+# GLOVE_MODEL_FILE="/home/pinkesh/DATASETS/glove-twitter/GENSIM.glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
 NO_OF_CLASSES=2
 
 MAX_NB_WORDS = None
