@@ -130,7 +130,7 @@ def gen_sequence():
             # 'racism': 1,
             # 'sexism': 2
             'noHate': 0,
-            'hate': 1,
+            'hate': 1
             }
 
     X, y = [], []

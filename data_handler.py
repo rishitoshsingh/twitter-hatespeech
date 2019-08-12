@@ -17,7 +17,7 @@ def get_data():
         tweets.append({
             'id': tweet_full.iloc[i]['file_id'],
             'text': tweet_full.iloc[i]['text'].lower(),
-            'label': tweet_full.iloc[i]['label'],
+            'label': tweet_full.iloc[i]['label']
             # 'name': tweet_full['user']['name'].split()[0]
         })
 
