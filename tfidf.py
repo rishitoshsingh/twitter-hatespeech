@@ -49,9 +49,11 @@ TOKENIZER=None
 
 def gen_data():
     label_map = {
-            'none': 0,
-            'racism': 1,
-            'sexism': 2
+            # 'none': 0,
+            # 'racism': 1,
+            # 'sexism': 2
+            'noHate': 0,
+            'hate': 1
         }
     tweet_data = get_data()
     for tweet in tweet_data:
@@ -63,7 +65,7 @@ def gen_data():
 
 def get_model(m_type=None):
     if not m_type:
-        print 'Please specify a model type'
+        print('Please specify a model type')
         return None
 
     if m_type == "tfidf_svm":
@@ -76,7 +78,7 @@ def get_model(m_type=None):
         logreg = GradientBoostingClassifier(loss=LOSS_FUN, n_estimators=N_ESTIMATORS)
     elif m_type == "tfidf_random_forest":
         logreg = RandomForestClassifier(class_weight=CLASS_WEIGHT, n_estimators=N_ESTIMATORS)
-        print "ERROR: Please specify a correct model"
+        print("ERROR: Please specify a correct model")
         return None
 
     return logreg
@@ -84,17 +86,17 @@ def get_model(m_type=None):
 
 def classification_model(X, Y, model_type=None):
     X, Y = shuffle(X, Y, random_state=SEED)
-    print "Model Type:", model_type
+    print("Model Type:", model_type)
 
     #predictions = cross_val_predict(logreg, X, Y, cv=NO_OF_FOLDS)
     scores1 = cross_val_score(get_model(model_type), X, Y, cv=NO_OF_FOLDS, scoring='precision_weighted')
-    print "Precision(avg): %0.3f (+/- %0.3f)" % (scores1.mean(), scores1.std() * 2)
+    print("Precision(avg): %0.3f (+/- %0.3f)" % (scores1.mean(), scores1.std() * 2))
 
     scores2 = cross_val_score(get_model(model_type), X, Y, cv=NO_OF_FOLDS, scoring='recall_weighted')
-    print "Recall(avg): %0.3f (+/- %0.3f)" % (scores2.mean(), scores2.std() * 2)
-    
+    print("Recall(avg): %0.3f (+/- %0.3f)" % (scores2.mean(), scores2.std() * 2))
+
     scores3 = cross_val_score(get_model(model_type), X, Y, cv=NO_OF_FOLDS, scoring='f1_weighted')
-    print "F1-score(avg): %0.3f (+/- %0.3f)" % (scores3.mean(), scores3.std() * 2)
+    print("F1-score(avg): %0.3f (+/- %0.3f)" % (scores3.mean(), scores3.std() * 2))
 
 
 
@@ -130,7 +132,7 @@ if __name__ == "__main__":
     elif args.tokenizer == "nltk":
         TOKENIZER = TweetTokenizer().tokenize
 
-    print 'Max-ngram-length: %d' %(MAX_NGRAM_LENGTH)
+    print('Max-ngram-length: %d' %(MAX_NGRAM_LENGTH))
     #filter_vocab(20000)
 
     # For TFIDF-SVC or any other varient

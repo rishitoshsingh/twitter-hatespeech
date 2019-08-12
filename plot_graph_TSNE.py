@@ -29,15 +29,15 @@ def get_transform(initial_emb, final_emb):
         vec.append(initial_emb[w])
     for w in words:
         vec.append(final_emb[w])
-    
+
     X = np.array(vec)
-    print X.shape
-    
+    print(X.shape)
+
     model = TSNE(n_components=2, random_state=0)
     out = model.fit_transform(X)
-    
-    print out
-    print "Will plot now!"
+
+    print(out)
+    print("Will plot now!")
     return out
 
 
@@ -51,19 +51,19 @@ def plot(out):
     padding=0.0001
     xmin, xmax = min(out[:, 0]), max(out[:, 0])
     ymin, ymax = min(out[:, 1]), max(out[:, 1])
-    
+
     fig, ax = plt.subplots()
-    
+
     for (color, label, data) in [('red', 'GloVe', A), ('green', 'FastText+GloVe+Dyn', B)]:
         ax.scatter(data[:,0], data[:,1], c=color, s=area, label=label,
                                       alpha=0.3, edgecolors='none')
         for (row, word) in zip(data, words):
             ax.annotate(word, xy=(row[0], row[1]), xytext=(row[0], row[1]),)
-    
+
     plt.axis([xmin-padding,xmax+padding,ymin-padding,ymax+padding])
     plt.legend()
     plt.grid(True)
-    
+
     plt.show()
 
 

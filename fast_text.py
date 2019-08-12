@@ -3,7 +3,7 @@ from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Embedding, Input, LSTM
 from keras.models import Sequential, Model
-from keras.layers import Activation, Dense, Dropout, Embedding, Flatten, Input, Merge, Convolution1D, MaxPooling1D, GlobalMaxPooling1D, GlobalAveragePooling1D
+from keras.layers import Activation, Dense, Dropout, Embedding, Flatten, Input, merge, Convolution1D, MaxPooling1D, GlobalMaxPooling1D, GlobalAveragePooling1D
 import numpy as np
 from preprocess_twitter import tokenize as tokenizer_g
 import pdb
@@ -27,9 +27,11 @@ texts = []  # list of text samples
 labels_index = {}  # dictionary mapping label name to numeric id
 labels = []  # list of label ids
 label_map = {
-        'none': 0,
-        'racism': 1,
-        'sexism': 2
+        # 'none': 0,
+        # 'racism': 1,
+        # 'sexism': 2
+        'noHate': 0,
+        'hate': 1,
     }
 tweet_data = get_data()
 for tweet in tweet_data:
@@ -46,7 +48,7 @@ np.random.seed(42)
 
 # PINKESH files
 GLOVE_MODEL_FILE="/home/pinkesh/DATASETS/glove-twitter/GENSIM.glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
-NO_OF_CLASSES=3
+NO_OF_CLASSES=2
 
 MAX_NB_WORDS = None
 VALIDATION_SPLIT = 0.2
@@ -106,7 +108,7 @@ def gen_vocab():
     vocab_index = 1
     for tweet in tweets:
         text = Tokenize(tweet['text'])
-        text = ''.join([c for c in text if c not in punctuation])
+        text = ' '.join([c for c in text if c not in punctuation])
         words = text.split()
         words = [word for word in words if word not in STOPWORDS]
 
@@ -132,9 +134,11 @@ def filter_vocab(k):
 
 def gen_sequence():
     y_map = {
-            'none': 0,
-            'racism': 1,
-            'sexism': 2
+            # 'none': 0,
+            # 'racism': 1,
+            # 'sexism': 2
+            'nohate': 0,
+            'hate': 1
             }
 
     X, y = [], []
@@ -193,14 +197,14 @@ def train_fasttext(X, y, model, inp_dim,embedding_weights, epochs=10, batch_size
             for X_batch in batch_gen(X_temp, batch_size):
                 x = X_batch[:, :sentence_len]
                 y_temp = X_batch[:, sentence_len]
-		class_weights = {}
-		class_weights[0] = np.where(y_temp == 0)[0].shape[0]/float(len(y_temp))
-		class_weights[1] = np.where(y_temp == 1)[0].shape[0]/float(len(y_temp))
-		class_weights[2] = np.where(y_temp == 2)[0].shape[0]/float(len(y_temp))
+                class_weights = {}
+                class_weights[0] = np.where(y_temp == 0)[0].shape[0]/float(len(y_temp))
+                class_weights[1] = np.where(y_temp == 1)[0].shape[0]/float(len(y_temp))
+                class_weights[2] = np.where(y_temp == 2)[0].shape[0]/float(len(y_temp))
                 try:
                     y_temp = np_utils.to_categorical(y_temp, nb_classes=3)
                 except Exception as e:
-                    print e
+                    print(e)
                 #print x.shape, y.shape
                 loss, acc = model.train_on_batch(x, y_temp)#, class_weight=class_weights)
                 print(loss, acc)

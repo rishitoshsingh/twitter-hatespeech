@@ -101,7 +101,7 @@ def gen_vocab():
     vocab_index = 1
     for tweet in tweets:
         text = TOKENIZER(tweet['text'].lower())
-        text = ''.join([c for c in text if c not in punctuation])
+        text = ' '.join([c for c in text if c not in punctuation])
         words = text.split()
         words = [word for word in words if word not in STOPWORDS]
 
@@ -126,9 +126,11 @@ def filter_vocab(k):
 
 def gen_sequence():
     y_map = {
-            'none': 0,
-            'racism': 1,
-            'sexism': 2
+            # 'none': 0,
+            # 'racism': 1,
+            # 'sexism': 2
+            'noHate': 0,
+            'hate': 1,
             }
 
     X, y = [], []
@@ -259,7 +261,7 @@ if __name__ == "__main__":
         TOKENIZER = glove_tokenize
     elif args.tokenizer == "nltk":
         TOKENIZER = tokenize_nltk.casual.TweetTokenizer(strip_handles=True, reduce_len=True).tokenize
-    INITIALIZE_WEIGHTS_WITH = args.initialize_weights    
+    INITIALIZE_WEIGHTS_WITH = args.initialize_weights
     LEARN_EMBEDDINGS = args.learn_embeddings
     EPOCHS = int(args.epochs)
     BATCH_SIZE = int(args.batch_size)

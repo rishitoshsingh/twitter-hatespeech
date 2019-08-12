@@ -72,9 +72,11 @@ def select_tweets_whose_embedding_exists():
 
 def gen_data():
     y_map = {
-            'none': 0,
-            'racism': 1,
-            'sexism': 2
+            # 'none': 0,
+            # 'racism': 1,
+            # 'sexism': 2
+            'noHate': 0,
+            'hate': 1
             }
 
     X, y = [], []
@@ -91,7 +93,7 @@ def gen_data():
         y.append(y_map[tweet['label']])
     return X, y
 
-    
+
 def get_model(m_type=None):
     if not m_type:
         print("ERROR: Please specify a model type!")
@@ -123,7 +125,7 @@ def classification_model(X, Y, model_type=None):
 
     scores2 = cross_val_score(get_model(model_type), X, Y, cv=NO_OF_FOLDS, scoring='recall_weighted')
     print("Recall(avg): %0.3f (+/- %0.3f)" % (scores2.mean(), scores2.std() * 2))
-    
+
     scores3 = cross_val_score(get_model(model_type), X, Y, cv=NO_OF_FOLDS, scoring='f1_weighted')
     print("F1-score(avg): %0.3f (+/- %0.3f)" % (scores3.mean(), scores3.std() * 2))
 
