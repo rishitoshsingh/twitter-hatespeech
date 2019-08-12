@@ -31,7 +31,7 @@ label_map = {
         # 'racism': 1,
         # 'sexism': 2
         'noHate': 0,
-        'hate': 1,
+        'hate': 1
     }
 tweet_data = get_data()
 for tweet in tweet_data:
