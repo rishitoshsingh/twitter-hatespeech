@@ -274,7 +274,7 @@ if __name__ == "__main__":
     print('Embedding Dimension: %d' %(EMBEDDING_DIM))
     print('Allowing embedding learning: %s' %(str(LEARN_EMBEDDINGS)))
 
-    word2vec_model = gensim.models.KeyedVectors.load_word2vec_format(GLOVE_MODEL_FILE)
+    word2vec_model = gensim.models.KeyedVectors.load_word2vec_format(GLOVE_MODEL_FILE,binary=True, encoding="utf-8")
 
     tweets = select_tweets()
     gen_vocab()

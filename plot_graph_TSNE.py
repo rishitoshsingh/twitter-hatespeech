@@ -11,7 +11,7 @@ words = ['mohammed', 'murderer', 'pedophile', 'religion', 'terrorism', 'islamic'
 
 def load_initial_emb():
     # initial_emb = gensim.models.Word2Vec.load_word2vec_format("/home/pinkesh/DATASETS/glove-twitter/GENSIM.glove.twitter.27B.200d.txt")
-    initial_emb = gensim.models.Word2Vec.load_word2vec_format("C:\Users\bdcoe\Documents\Rishi_DNM\Datasets\GENSIM.glove.twitter.27B.200d.txt")
+    initial_emb = gensim.models.Word2Vec.load_word2vec_format("C:\Users\bdcoe\Documents\Rishi_DNM\Datasets\glove.twitter.27B.200d.txt")
     return initial_emb
 
 def load_final_emb():
