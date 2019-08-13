@@ -3,7 +3,7 @@ import argparse
 from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Embedding, Input, LSTM
 from keras.models import Sequential, Model
-from keras.layers import Activation, Dense, Dropout, Embedding, Flatten, Input, Merge, Convolution1D, MaxPooling1D, GlobalMaxPooling1D
+from keras.layers import Activation, Dense, Dropout, Embedding, Flatten, Input, merge, Convolution1D, MaxPooling1D, GlobalMaxPooling1D
 import numpy as np
 import pdb
 from nltk import tokenize
@@ -68,7 +68,7 @@ def get_embedding(word):
 def get_embedding_weights():
     embedding = np.zeros((len(vocab) + 1, EMBEDDING_DIM))
     n = 0
-    for k, v in vocab.iteritems():
+    for k, v in vocab.items():
         try:
             embedding[v] = word2vec_model[k]
         except:
@@ -136,7 +136,7 @@ def gen_sequence():
     X, y = [], []
     for tweet in tweets:
         text = TOKENIZER(tweet['text'].lower())
-        text = ''.join([c for c in text if c not in punctuation])
+        text = ' '.join([c for c in text if c not in punctuation])
         words = text.split()
         words = [word for word in words if word not in STOPWORDS]
         seq, _emb = [], []
@@ -238,11 +238,11 @@ def train_CNN(X, y, inp_dim, model, weights, epochs=EPOCHS, batch_size=BATCH_SIZ
                 try:
                     y_temp = np_utils.to_categorical(y_temp, nb_classes=3)
                 except Exception as e:
-                    print e
-                    print y_temp
-                print x.shape, y.shape
+                    print(e)
+                    print(y_temp)
+                print(x.shape, y.shape)
                 loss, acc = model.train_on_batch(x, y_temp, class_weight=class_weights)
-                print loss, acc
+                print(loss, acc)
         y_pred = model.predict_on_batch(X_test)
         y_pred = np.argmax(y_pred, axis=1)
         print(classification_report(y_test, y_pred))
@@ -305,7 +305,7 @@ if __name__ == "__main__":
     print('Embedding Dimension: %d' %(EMBEDDING_DIM))
     print('Allowing embedding learning: %s' %(str(LEARN_EMBEDDINGS)))
 
-    word2vec_model = gensim.models.Word2Vec.load_word2vec_format(GLOVE_MODEL_FILE)
+    word2vec_model = gensim.models.KeyedVectors.load_word2vec_format(GLOVE_MODEL_FILE)
     np.random.seed(SEED)
 
 

@@ -47,7 +47,8 @@ np.random.seed(42)
 
 
 # PINKESH files
-GLOVE_MODEL_FILE="C:\Users\bdcoe\Documents\Rishi_DNM\Datasets\glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
+GLOVE_MODEL_FILE="/media/rishi/New\ Volume/Datasets/glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
+# GLOVE_MODEL_FILE="C:\Users\bdcoe\Documents\Rishi_DNM\Datasets\glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
 # GLOVE_MODEL_FILE="/home/pinkesh/DATASETS/glove-twitter/GENSIM.glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
 NO_OF_CLASSES=2
 
@@ -145,7 +146,7 @@ def gen_sequence():
     X, y = [], []
     for tweet in tweets:
         text = Tokenize(tweet['text'])
-        text = ''.join([c for c in text if c not in punctuation])
+        text = ' '.join([c for c in text if c not in punctuation])
         words = text.split()
         words = [word for word in words if word not in STOPWORDS]
         seq, _emb = [], []
