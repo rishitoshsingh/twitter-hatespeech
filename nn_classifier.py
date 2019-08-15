@@ -55,7 +55,7 @@ f_vocab = open('vocab_fast_text', 'r')
 vocab = json.load(f_vocab)
 word2vec_model = {}
 for k,v in vocab.iteritems():
-word2vec_model[k] = word2vec_model1[int(v)]
+    word2vec_model[k] = word2vec_model1[int(v)]
 del word2vec_model1
 
 

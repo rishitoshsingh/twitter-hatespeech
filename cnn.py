@@ -233,10 +233,10 @@ def train_CNN(X, y, inp_dim, model, weights, epochs=EPOCHS, batch_size=BATCH_SIZ
                     class_weights = {}
                     class_weights[0] = np.where(y_temp == 0)[0].shape[0]/float(len(y_temp))
                     class_weights[1] = np.where(y_temp == 1)[0].shape[0]/float(len(y_temp))
-                    class_weights[2] = np.where(y_temp == 2)[0].shape[0]/float(len(y_temp))
+                    # class_weights[2] = np.where(y_temp == 2)[0].shape[0]/float(len(y_temp))
 
                 try:
-                    y_temp = np_utils.to_categorical(y_temp, nb_classes=3)
+                    y_temp = np_utils.to_categorical(y_temp, nb_classes=2)
                 except Exception as e:
                     print(e)
                     print(y_temp)

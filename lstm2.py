@@ -18,6 +18,7 @@ from string import punctuation
 from collections import defaultdict
 from batch_gen import batch_gen
 import sys
+import keras
 
 from nltk import tokenize as tokenize_nltk
 from my_tokenizer import glove_tokenize
@@ -161,7 +162,7 @@ def lstm_model(sequence_length, embedding_dim):
     model.add(LSTM(50))
     model.add(Dropout(0.5))
     model.add(Dense(1))
-    model.add(Activation('relu'))
+    model.add(Activation('softmax'))
     model.compile(loss=LOSS_FUN, optimizer=OPTIMIZER, metrics=['accuracy'])
     print(model.summary())
     return model
@@ -184,6 +185,7 @@ def train_LSTM(X, y, model, inp_dim, weights, epochs=EPOCHS, batch_size=BATCH_SI
         X_train, y_train = X[train_index], y[train_index]
         X_test, y_test = X[test_index], y[test_index]
         y_train = y_train.reshape((len(y_train), 1))
+        #y_train=keras.utils.to_categorical(y_train)
         X_temp = np.hstack((X_train, y_train))
         for epoch in range(epochs):
             for X_batch in batch_gen(X_temp, batch_size):
@@ -197,11 +199,11 @@ def train_LSTM(X, y, model, inp_dim, weights, epochs=EPOCHS, batch_size=BATCH_SI
                     class_weights[1] = np.where(y_temp == 1)[0].shape[0]/float(len(y_temp))
                     # class_weights[2] = np.where(y_temp == 2)[0].shape[0]/float(len(y_temp))
 
-                try:
-                    y_temp = np_utils.to_categorical(y_temp, nb_classes=2)
-                except Exception as e:
-                    print(e)
-                    print(y_temp)
+                #try:
+                    #y_temp = np_utils.to_categorical(y_temp)
+                #except Exception as e:
+                 #   print(e)
+                  #  print(y_temp)
                 print(x.shape, y.shape)
                 loss, acc = model.train_on_batch(x, y_temp, class_weight=class_weights)
                 print(loss, acc)

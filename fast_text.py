@@ -47,14 +47,14 @@ np.random.seed(42)
 
 
 # PINKESH files
-GLOVE_MODEL_FILE="/media/rishi/New\ Volume/Datasets/glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
+GLOVE_MODEL_FILE="/media/rishi/New Volume/Datasets/glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
 # GLOVE_MODEL_FILE="C:\Users\bdcoe\Documents\Rishi_DNM\Datasets\glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
 # GLOVE_MODEL_FILE="/home/pinkesh/DATASETS/glove-twitter/GENSIM.glove.twitter.27B." + str(EMBEDDING_DIM) + "d.txt"
 NO_OF_CLASSES=2
 
 MAX_NB_WORDS = None
 VALIDATION_SPLIT = 0.2
-word2vec_model = gensim.models.Word2Vec.load_word2vec_format(GLOVE_MODEL_FILE)
+word2vec_model = gensim.models.KeyedVectors.load_word2vec_format(GLOVE_MODEL_FILE)
 
 
 # vocab generation
@@ -75,7 +75,7 @@ def get_embedding(word):
 def get_embedding_weights():
     embedding = np.zeros((len(vocab) + 1, EMBEDDING_DIM))
     n = 0
-    for k, v in vocab.iteritems():
+    for k, v in vocab.items():
     	try:
     		embedding[v] = word2vec_model[k]
     	except:
@@ -139,7 +139,7 @@ def gen_sequence():
             # 'none': 0,
             # 'racism': 1,
             # 'sexism': 2
-            'nohate': 0,
+            'noHate': 0,
             'hate': 1
             }
 
@@ -175,7 +175,7 @@ def fast_text_model(sequence_length):
     #model.add(Embedding(len(vocab)+1, EMBEDDING_DIM, input_length=sequence_length, trainable=False))
     model.add(Dropout(0.5))
     model.add(GlobalAveragePooling1D())
-    model.add(Dense(3, activation='softmax'))
+    model.add(Dense(2, activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
     print(model.summary())
     return model
@@ -202,9 +202,9 @@ def train_fasttext(X, y, model, inp_dim,embedding_weights, epochs=10, batch_size
                 class_weights = {}
                 class_weights[0] = np.where(y_temp == 0)[0].shape[0]/float(len(y_temp))
                 class_weights[1] = np.where(y_temp == 1)[0].shape[0]/float(len(y_temp))
-                class_weights[2] = np.where(y_temp == 2)[0].shape[0]/float(len(y_temp))
+                # class_weights[2] = np.where(y_temp == 2)[0].shape[0]/float(len(y_temp))
                 try:
-                    y_temp = np_utils.to_categorical(y_temp, nb_classes=3)
+                    y_temp = np_utils.to_categorical(y_temp, num_classes=2)
                 except Exception as e:
                     print(e)
                 #print x.shape, y.shape
@@ -237,7 +237,7 @@ def train_fasttext(X, y, model, inp_dim,embedding_weights, epochs=10, batch_size
 
 
 def check_semantic_sim(embedding_table, word):
-    reverse_vocab = {v:k for k,v in vocab.iteritems()}
+    reverse_vocab = {v:k for k,v in vocab.items()}
     sim_word_idx = get_similar_words(embedding_table, embedding_table[vocab[word]], 25)
     sim_words = map(lambda x:reverse_vocab[x[1]], sim_word_idx)
     print(sim_words)
@@ -245,7 +245,7 @@ def check_semantic_sim(embedding_table, word):
 def tryWord(embedding_table):
     while True:
         print("enter word")
-        word = raw_input()
+        word = input()
         if word == "pdb":
             pdb.set_trace()
         elif word == 'exit':
